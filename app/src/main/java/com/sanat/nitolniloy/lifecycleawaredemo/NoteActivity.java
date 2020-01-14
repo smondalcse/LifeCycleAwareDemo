@@ -1,18 +1,21 @@
 package com.sanat.nitolniloy.lifecycleawaredemo;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.List;
 import java.util.UUID;
 
 public class NoteActivity extends AppCompatActivity {
-
+    private static final String TAG = "NoteActivity";
     private static final int NEW_NOTE_ACTIVITY_REQUEST_CODE = 101;
     private NoteViewModel noteViewModel;
     @Override
@@ -31,6 +34,14 @@ public class NoteActivity extends AppCompatActivity {
 
         noteViewModel = ViewModelProviders.of(this).get(NoteViewModel.class);
 
+        noteViewModel.getAllNotes().observe(this, new Observer<List<Note>>() {
+            @Override
+            public void onChanged(List<Note> notes) {
+                for (int i = 0; i < notes.size(); i++) {
+                    Log.i(TAG, "onChanged: " + notes.get(i).getNote());
+                }
+            }
+        });
     }
 
     @Override
